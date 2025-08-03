@@ -7,6 +7,7 @@ import React from "react"
 
 import Header from "./components/Header"
 import Main from "./components/Main"
+// import styled from "@emotion/styled"
 
 function App() {
   const [theme, setTheme] = React.useState(() => {
@@ -53,17 +54,18 @@ function App() {
   return (
     <Router>
 
-      <Header 
-        theme={theme} 
-        setTheme={setTheme}
-      />
+        <Header 
+          theme={theme} 
+          setTheme={setTheme}
+        />
 
-      <Routes>
-        <Route path="/" element={<Main />}></Route>
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Main />}></Route>
+        </Routes>
       
     </Router>
   )
 }
+
 
 export default App

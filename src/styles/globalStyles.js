@@ -69,6 +69,7 @@ export const globalStyles = css`
     --fs-3: calc(18 / 16 * 1rem);
     --fs-4: calc(16 / 16 * 1rem);
     --fs-5: calc(14 / 16 * 1rem);
+    --fs-6: calc(12 / 16 * 1rem);
 
 
     /* FONT HEIGHTS */
@@ -130,6 +131,7 @@ export const globalStyles = css`
     font-family: 'Nunito Sans', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: var(--fw-regular);
     line-height: var(--fh-150);
+    font-size: clamp(var(--fs-6), 2vw, var(--fs-4));
     
     /* Apply theme colors */
     background-color: var(--bg-color);
@@ -170,11 +172,8 @@ export const globalStyles = css`
   }
 
   h1 {
-    font-size: var(--fs-2);
+    font-size: clamp(var(--fs-5), 2vw, var(--fs-2));
     line-height: var(--fh-137);
-    /* box-shadow: 
-      0 2px 4px var(--shadow-color),
-      0 8px 16px var(--shadow-color); */
   }
   h2 {
     font-size: var(--fs-1);
