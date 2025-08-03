@@ -7,7 +7,7 @@ import React from "react"
 
 import Header from "./components/Header"
 import Main from "./components/Main"
-// import styled from "@emotion/styled"
+import CountryDetail from "./components/CountryDetail"
 
 function App() {
   const [theme, setTheme] = React.useState(() => {
@@ -61,6 +61,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Main />}></Route>
+          <Route path="/country/:name" element={<CountryDetail/>}></Route>
         </Routes>
       
     </Router>

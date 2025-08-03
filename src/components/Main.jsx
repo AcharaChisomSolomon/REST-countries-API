@@ -1,7 +1,12 @@
 import React from "react";
-import RegionSelector from "./RegionSelector";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import styled from "@emotion/styled";
+
+import CountryCard from "./CountryCard";
+import RegionSelector from "./RegionSelector";
+
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+
+import { useFetch } from "../hooks/useFetch";
 
 export default function Main() {
   const [searchDetails, setSearchDetails] = React.useState({
@@ -9,30 +14,66 @@ export default function Main() {
     region: 'all'
   })
   const { searchTerm, region } = searchDetails
-  React.useEffect(() => {
-    console.log(searchTerm, region)
-  }, [searchTerm, region])
+  
+  
+  const {
+    data: allCountries,
+  } = useFetch(
+    'https://restcountries.com/v3.1/all?fields=name,region,population,capital,flags'
+  )
+
+  // Filter countries based on search criteria
+  const filteredCountries = React.useMemo(() => {
+    if (!allCountries) return [];
+    
+    return allCountries.filter(country => {
+      const matchesSearch = searchTerm === '' || 
+        country.name.common.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesRegion = region === 'all' || 
+        country.region.toLowerCase() === region.toLowerCase();
+      
+      return matchesSearch && matchesRegion;
+    });
+  }, [allCountries, searchTerm, region]);
+
 
   return (
-    <Wrapper>
-      <InputContainer>
-        <MagnifyingGlassIcon width={17.5} height={17.5} />
-        <Input 
-          id="searchTerm"
-          placeholder="Search for a country..."
-          type="text" 
-          value={searchDetails.searchTerm}
-          onChange={(e) => setSearchDetails({...searchDetails, searchTerm: e.target.value})}
+    <main>
+
+      <InputWrapper>
+        <InputContainer>
+          <MagnifyingGlassIcon width={17.5} height={17.5} />
+          <Input 
+            id="searchTerm"
+            placeholder="Search for a country..."
+            type="text" 
+            value={searchDetails.searchTerm}
+            onChange={(e) => setSearchDetails({...searchDetails, searchTerm: e.target.value})}
+          />
+        </InputContainer>
+        <RegionSelector 
+          setSearchDetails={setSearchDetails}
         />
-      </InputContainer>
-      <RegionSelector 
-        setSearchDetails={setSearchDetails}
-      />
-    </Wrapper>
+      </InputWrapper>
+
+      <CountryCardContainer>
+        {
+          filteredCountries.map(country => {
+            return (
+              <CountryCard
+                key={country.name.common}
+                countryData={country}
+              ></CountryCard>
+            )
+          })
+        }
+      </CountryCardContainer>
+
+    </main>
   )
 }
 
-const Wrapper = styled.main`
+const InputWrapper = styled.section`
   max-width: calc(1440 / 16 * 1rem);
   margin: 0 auto;
   padding-inline: clamp(var(--spacing-300), 10vw - 2rem, var(--spacing-1000));
@@ -43,7 +84,7 @@ const Wrapper = styled.main`
   align-items: center;
   justify-content: space-between;
 
-  gap: var(--spacing-500);
+  gap: var(--spacing-100);
 `;
 
 const InputContainer = styled.div`
@@ -76,4 +117,15 @@ const Input = styled.input`
   &:focus {
     outline: none;
   }
+`;
+
+const CountryCardContainer = styled.section`
+  max-width: calc(1440 / 16 * 1rem);
+  margin: 0 auto;
+  padding-inline: clamp(var(--spacing-300), 10vw - 2rem, var(--spacing-1000));
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 264px);
+  gap: var(--spacing-900);
+  place-content: center;
 `;
