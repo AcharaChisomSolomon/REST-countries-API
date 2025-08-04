@@ -28,7 +28,7 @@ export default function Main() {
     
     return allCountries.filter(country => {
       const matchesSearch = searchTerm === '' || 
-        country.name.common.toLowerCase().includes(searchTerm.toLowerCase());
+        country.name.official.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesRegion = region === 'all' || 
         country.region.toLowerCase() === region.toLowerCase();
       
@@ -128,4 +128,5 @@ const CountryCardContainer = styled.section`
   grid-template-columns: repeat(auto-fit, 264px);
   gap: var(--spacing-900);
   place-content: center;
+  margin-block-end: var(--spacing-900);
 `;
